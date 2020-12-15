@@ -1,0 +1,12 @@
+query PROFILE {
+   profile {
+      id
+      username
+      email
+      posts {
+         id
+         uniqueId
+      }
+      token
+   }
+}

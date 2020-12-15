@@ -1,0 +1,8 @@
+mutation CHANGEEMAIL($email: String!) {
+   updateEmail(email: $email) {
+      id
+      token
+      username
+      email
+   }
+}

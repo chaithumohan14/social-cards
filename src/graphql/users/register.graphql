@@ -1,0 +1,14 @@
+mutation REGISTER($email: String!, $username: String!, $password: String!) {
+   register(password: $password, email: $email, username: $username) {
+      id
+      username
+      email
+      token
+      posts {
+         id
+         caption
+         likes
+         uniqueId
+      }
+   }
+}
