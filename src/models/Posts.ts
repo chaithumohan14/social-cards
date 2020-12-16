@@ -1,10 +1,16 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+   BaseEntity,
+   Column,
+   Entity,
+   ManyToOne,
+   PrimaryGeneratedColumn,
+} from "typeorm";
 import Users from "./Users";
 
 @ObjectType()
 @Entity()
-class Posts {
+class Posts extends BaseEntity {
    @Field(() => ID)
    @PrimaryGeneratedColumn("uuid")
    id!: string;
@@ -14,7 +20,7 @@ class Posts {
    caption!: string;
 
    @Field(() => Number)
-   @Column("integer")
+   @Column("integer", { default: 0 })
    likes!: number;
 
    @Field(() => Users)

@@ -12,6 +12,7 @@ import { buildSchema } from "type-graphql";
 import { MyContext, __prod__ } from "./globals";
 import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
 import UserResolver from "./resolvers/UserResolver";
+import PostsResolver from "./resolvers/PostsResolver";
 
 const app: express.Application = express();
 const nextserver = next({ dev: !__prod__ });
@@ -20,7 +21,7 @@ const nexthandler = nextserver.getRequestHandler();
 dotenv.config();
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, "..", "static")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(
    graphqlUploadExpress({
       maxFieldSize: 1000000,
@@ -32,7 +33,8 @@ app.use(
 const main = async () => {
    const schema = await buildSchema({
       validate: false,
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, PostsResolver],
+      nullableByDefault: true,
    });
 
    const apolloserver = new ApolloServer({

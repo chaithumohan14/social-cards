@@ -15,7 +15,7 @@ import { checkAuth } from "../utils/authmiddleware";
 
 @Resolver((_of) => Users)
 class UserResolver {
-   @Query(() => Users, { nullable: true })
+   @Query(() => Users)
    @UseMiddleware(checkAuth)
    async profile(
       @Ctx() { user }: MyContext
@@ -23,7 +23,7 @@ class UserResolver {
       return user;
    }
 
-   @Mutation(() => Users, { nullable: true })
+   @Mutation(() => Users)
    async register(
       @Arg("email") email: string,
       @Arg("username") username: string,
@@ -42,7 +42,7 @@ class UserResolver {
       return newuser;
    }
 
-   @Mutation(() => Users, { nullable: true })
+   @Mutation(() => Users)
    async login(@Arg("email") email: string, @Arg("password") password: string) {
       if (!validator.isEmail(email)) return null;
       let newuser = await Users.getUserByEmail(email);
@@ -53,7 +53,7 @@ class UserResolver {
       }
    }
 
-   @Mutation(() => Users, { nullable: true })
+   @Mutation(() => Users)
    @UseMiddleware(checkAuth)
    async updatePassword(
       @Arg("password") password: string,
@@ -65,7 +65,7 @@ class UserResolver {
       return user;
    }
 
-   @Mutation(() => Users, { nullable: true })
+   @Mutation(() => Users)
    @UseMiddleware(checkAuth)
    async updateEmail(@Arg("email") email: string, @Ctx() { user }: MyContext) {
       if (!validator.isEmail(email)) return null;
@@ -74,7 +74,7 @@ class UserResolver {
       return user;
    }
 
-   @Mutation(() => Users, { nullable: true })
+   @Mutation(() => Users)
    @UseMiddleware(checkAuth)
    async updateUsername(
       @Arg("username") username: string,
@@ -86,7 +86,7 @@ class UserResolver {
       return user;
    }
 
-   @Mutation(() => Boolean, { nullable: true })
+   @Mutation(() => Boolean)
    @UseMiddleware(checkAuth)
    async deleteUser(@Ctx() { user }: MyContext) {
       if (!user) return null;
