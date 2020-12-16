@@ -1,3 +1,4 @@
+import http from "http";
 import express from "express";
 import next from "next";
 import dotenv from "dotenv";
@@ -47,13 +48,23 @@ const main = async () => {
          };
       },
       uploads: false,
+      subscriptions: {
+         onConnect: () => console.log(colors.green(`> Subscriptions running`)),
+      },
    });
    apolloserver.applyMiddleware({ app, cors: false, path: "/api" });
+   const httpserver = http.createServer(app);
+   apolloserver.installSubscriptionHandlers(httpserver);
    await nextserver.prepare();
-   app.listen(process.env.PORT, async () => {
+   httpserver.listen(process.env.PORT, async () => {
       await createConnection();
       console.log(
          colors.green(`Server running on http://localhost:${process.env.PORT}`)
+      );
+      console.log(
+         colors.green(
+            `Subscriptions running on ws://localhost:${process.env.PORT}${apolloserver.subscriptionsPath}`
+         )
       );
    });
 

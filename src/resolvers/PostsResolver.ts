@@ -4,9 +4,13 @@ import {
    Arg,
    Ctx,
    Mutation,
+   PubSub,
    Query,
    Resolver,
+   Subscription,
    UseMiddleware,
+   PubSubEngine,
+   Root,
 } from "type-graphql";
 import { v4 } from "uuid";
 import { MyContext, __working_dir__ } from "../globals";
@@ -33,13 +37,14 @@ class PostsResolver {
    async addPost(
       @Arg("caption") caption: string,
       @Arg("pic", () => GraphQLUpload) pic: FileUpload,
-      @Ctx() { user }: MyContext
+      @Ctx() { user }: MyContext,
+      @PubSub() pubsub: PubSubEngine
    ) {
       if (!user) return null;
       const uniqueId = v4();
       let newpost = Posts.create({
          caption,
-         uniqueId,
+         uniqueId: `${uniqueId}.${pic.filename.split(".")[1]}`,
          user,
       });
       const uploaded = await uploadfile(
@@ -51,13 +56,20 @@ class PostsResolver {
             `${uniqueId}.${pic.filename.split(".")[1]}`
          )
       );
-      console.log(uploaded);
 
       if (uploaded) {
          console.log("pots");
-         newpost = await newpost.save();
+         await newpost.save();
+         pubsub.publish("POSTS", newpost);
          return newpost;
       } else return null;
+   }
+
+   @Subscription(() => Posts, {
+      topics: "POSTS",
+   })
+   async subPosts(@Root() post: Posts) {
+      return post;
    }
 }
 
