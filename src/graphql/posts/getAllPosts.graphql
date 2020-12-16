@@ -1,0 +1,13 @@
+query GETALLPOSTS {
+   getAllPosts {
+      id
+      caption
+      uniqueId
+      likes
+      user {
+         id
+         email
+         username
+      }
+   }
+}

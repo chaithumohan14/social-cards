@@ -1,0 +1,8 @@
+query GETPOSTS {
+   getPosts {
+      caption
+      id
+      uniqueId
+      likes
+   }
+}

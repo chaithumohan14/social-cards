@@ -1,0 +1,12 @@
+subscription POSTS {
+   posts {
+      id
+      caption
+      likes
+      uniqueId
+      user {
+         id
+         username
+      }
+   }
+}

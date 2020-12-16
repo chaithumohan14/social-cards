@@ -1,0 +1,8 @@
+mutation ADDPOST($pic: Upload!, $caption: String!) {
+   addPost(pic: $pic, caption: $caption) {
+      id
+      caption
+      uniqueId
+      likes
+   }
+}
