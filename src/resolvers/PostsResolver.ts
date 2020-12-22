@@ -68,7 +68,7 @@ class PostsResolver {
    @Subscription(() => Posts, {
       topics: "POSTS",
    })
-   async subPosts(@Root() post: Posts) {
+   async posts(@Root() post: Posts) {
       return post;
    }
 }

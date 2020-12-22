@@ -11,29 +11,33 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Query = {
   __typename?: 'Query';
   profile?: Maybe<Users>;
+  getPosts?: Maybe<Array<Maybe<Posts>>>;
+  getAllPosts?: Maybe<Array<Maybe<Posts>>>;
 };
 
 export type Users = {
   __typename?: 'Users';
-  id: Scalars['ID'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  posts: Array<Posts>;
+  id?: Maybe<Scalars['ID']>;
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  posts?: Maybe<Array<Maybe<Posts>>>;
   token?: Maybe<Scalars['String']>;
 };
 
 export type Posts = {
   __typename?: 'Posts';
-  id: Scalars['ID'];
-  caption: Scalars['String'];
-  likes: Scalars['Float'];
-  user: Users;
-  uniqueId: Scalars['String'];
+  id?: Maybe<Scalars['ID']>;
+  caption?: Maybe<Scalars['String']>;
+  likes?: Maybe<Scalars['Float']>;
+  user?: Maybe<Users>;
+  uniqueId?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -44,35 +48,103 @@ export type Mutation = {
   updateEmail?: Maybe<Users>;
   updateUsername?: Maybe<Users>;
   deleteUser?: Maybe<Scalars['Boolean']>;
+  addPost?: Maybe<Posts>;
 };
 
 
 export type MutationRegisterArgs = {
-  password: Scalars['String'];
-  username: Scalars['String'];
-  email: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationLoginArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationUpdatePasswordArgs = {
-  password: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationUpdateEmailArgs = {
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationUpdateUsernameArgs = {
-  username: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
 };
+
+
+export type MutationAddPostArgs = {
+  pic?: Maybe<Scalars['Upload']>;
+  caption?: Maybe<Scalars['String']>;
+};
+
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  posts?: Maybe<Posts>;
+};
+
+export type AddpostMutationVariables = Exact<{
+  pic: Scalars['Upload'];
+  caption: Scalars['String'];
+}>;
+
+
+export type AddpostMutation = (
+  { __typename?: 'Mutation' }
+  & { addPost?: Maybe<(
+    { __typename?: 'Posts' }
+    & Pick<Posts, 'id' | 'caption' | 'uniqueId' | 'likes'>
+  )> }
+);
+
+export type GetallpostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetallpostsQuery = (
+  { __typename?: 'Query' }
+  & { getAllPosts?: Maybe<Array<Maybe<(
+    { __typename?: 'Posts' }
+    & Pick<Posts, 'id' | 'caption' | 'uniqueId' | 'likes'>
+    & { user?: Maybe<(
+      { __typename?: 'Users' }
+      & Pick<Users, 'id' | 'email' | 'username'>
+    )> }
+  )>>> }
+);
+
+export type GetpostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetpostsQuery = (
+  { __typename?: 'Query' }
+  & { getPosts?: Maybe<Array<Maybe<(
+    { __typename?: 'Posts' }
+    & Pick<Posts, 'caption' | 'id' | 'uniqueId' | 'likes'>
+  )>>> }
+);
+
+export type PostsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PostsSubscription = (
+  { __typename?: 'Subscription' }
+  & { posts?: Maybe<(
+    { __typename?: 'Posts' }
+    & Pick<Posts, 'id' | 'caption' | 'likes' | 'uniqueId'>
+    & { user?: Maybe<(
+      { __typename?: 'Users' }
+      & Pick<Users, 'id' | 'username'>
+    )> }
+  )> }
+);
 
 export type DeleteuserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -93,10 +165,10 @@ export type LoginMutation = (
   & { login?: Maybe<(
     { __typename?: 'Users' }
     & Pick<Users, 'id' | 'username' | 'email' | 'token'>
-    & { posts: Array<(
+    & { posts?: Maybe<Array<Maybe<(
       { __typename?: 'Posts' }
       & Pick<Posts, 'id' | 'caption' | 'uniqueId'>
-    )> }
+    )>>> }
   )> }
 );
 
@@ -108,10 +180,10 @@ export type ProfileQuery = (
   & { profile?: Maybe<(
     { __typename?: 'Users' }
     & Pick<Users, 'id' | 'username' | 'email' | 'token'>
-    & { posts: Array<(
+    & { posts?: Maybe<Array<Maybe<(
       { __typename?: 'Posts' }
       & Pick<Posts, 'id' | 'uniqueId'>
-    )> }
+    )>>> }
   )> }
 );
 
@@ -127,10 +199,10 @@ export type RegisterMutation = (
   & { register?: Maybe<(
     { __typename?: 'Users' }
     & Pick<Users, 'id' | 'username' | 'email' | 'token'>
-    & { posts: Array<(
+    & { posts?: Maybe<Array<Maybe<(
       { __typename?: 'Posts' }
       & Pick<Posts, 'id' | 'caption' | 'likes' | 'uniqueId'>
-    )> }
+    )>>> }
   )> }
 );
 
@@ -174,6 +246,152 @@ export type ChangeusernameMutation = (
 );
 
 
+export const AddpostDocument = gql`
+    mutation ADDPOST($pic: Upload!, $caption: String!) {
+  addPost(pic: $pic, caption: $caption) {
+    id
+    caption
+    uniqueId
+    likes
+  }
+}
+    `;
+export type AddpostMutationFn = Apollo.MutationFunction<AddpostMutation, AddpostMutationVariables>;
+
+/**
+ * __useAddpostMutation__
+ *
+ * To run a mutation, you first call `useAddpostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddpostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addpostMutation, { data, loading, error }] = useAddpostMutation({
+ *   variables: {
+ *      pic: // value for 'pic'
+ *      caption: // value for 'caption'
+ *   },
+ * });
+ */
+export function useAddpostMutation(baseOptions?: Apollo.MutationHookOptions<AddpostMutation, AddpostMutationVariables>) {
+        return Apollo.useMutation<AddpostMutation, AddpostMutationVariables>(AddpostDocument, baseOptions);
+      }
+export type AddpostMutationHookResult = ReturnType<typeof useAddpostMutation>;
+export type AddpostMutationResult = Apollo.MutationResult<AddpostMutation>;
+export type AddpostMutationOptions = Apollo.BaseMutationOptions<AddpostMutation, AddpostMutationVariables>;
+export const GetallpostsDocument = gql`
+    query GETALLPOSTS {
+  getAllPosts {
+    id
+    caption
+    uniqueId
+    likes
+    user {
+      id
+      email
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetallpostsQuery__
+ *
+ * To run a query within a React component, call `useGetallpostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetallpostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetallpostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetallpostsQuery(baseOptions?: Apollo.QueryHookOptions<GetallpostsQuery, GetallpostsQueryVariables>) {
+        return Apollo.useQuery<GetallpostsQuery, GetallpostsQueryVariables>(GetallpostsDocument, baseOptions);
+      }
+export function useGetallpostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetallpostsQuery, GetallpostsQueryVariables>) {
+          return Apollo.useLazyQuery<GetallpostsQuery, GetallpostsQueryVariables>(GetallpostsDocument, baseOptions);
+        }
+export type GetallpostsQueryHookResult = ReturnType<typeof useGetallpostsQuery>;
+export type GetallpostsLazyQueryHookResult = ReturnType<typeof useGetallpostsLazyQuery>;
+export type GetallpostsQueryResult = Apollo.QueryResult<GetallpostsQuery, GetallpostsQueryVariables>;
+export const GetpostsDocument = gql`
+    query GETPOSTS {
+  getPosts {
+    caption
+    id
+    uniqueId
+    likes
+  }
+}
+    `;
+
+/**
+ * __useGetpostsQuery__
+ *
+ * To run a query within a React component, call `useGetpostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetpostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetpostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetpostsQuery(baseOptions?: Apollo.QueryHookOptions<GetpostsQuery, GetpostsQueryVariables>) {
+        return Apollo.useQuery<GetpostsQuery, GetpostsQueryVariables>(GetpostsDocument, baseOptions);
+      }
+export function useGetpostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetpostsQuery, GetpostsQueryVariables>) {
+          return Apollo.useLazyQuery<GetpostsQuery, GetpostsQueryVariables>(GetpostsDocument, baseOptions);
+        }
+export type GetpostsQueryHookResult = ReturnType<typeof useGetpostsQuery>;
+export type GetpostsLazyQueryHookResult = ReturnType<typeof useGetpostsLazyQuery>;
+export type GetpostsQueryResult = Apollo.QueryResult<GetpostsQuery, GetpostsQueryVariables>;
+export const PostsDocument = gql`
+    subscription POSTS {
+  posts {
+    id
+    caption
+    likes
+    uniqueId
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __usePostsSubscription__
+ *
+ * To run a query within a React component, call `usePostsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePostsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePostsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<PostsSubscription, PostsSubscriptionVariables>) {
+        return Apollo.useSubscription<PostsSubscription, PostsSubscriptionVariables>(PostsDocument, baseOptions);
+      }
+export type PostsSubscriptionHookResult = ReturnType<typeof usePostsSubscription>;
+export type PostsSubscriptionResult = Apollo.SubscriptionResult<PostsSubscription>;
 export const DeleteuserDocument = gql`
     mutation DELETEUSER {
   deleteUser
